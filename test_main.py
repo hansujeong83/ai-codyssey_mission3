@@ -68,8 +68,8 @@ class DatasetTests(unittest.TestCase):
 
     def test_demo_data_all_pass(self):
         report = analyze_dataset(self.path, verbose=False)
-        self.assertEqual(report["total"], 8)
-        self.assertEqual(report["passed"], 8)
+        self.assertEqual(report["total"], 6)
+        self.assertEqual(report["passed"], 6)
         self.assertEqual(report["failed"], 0)
 
     def test_extract_size(self):

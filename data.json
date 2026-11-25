@@ -1,42 +1,6 @@
 {
-  "_notice": "DEMO ONLY. Replace with the original course data.json before official grading.",
+  "_notice": "DEMO ONLY. Replace with the official course data.json before grading.",
   "filters": {
-    "size_3": {
-      "cross": [
-        [
-          0,
-          1,
-          0
-        ],
-        [
-          1,
-          1,
-          1
-        ],
-        [
-          0,
-          1,
-          0
-        ]
-      ],
-      "x": [
-        [
-          1,
-          0,
-          1
-        ],
-        [
-          0,
-          1,
-          0
-        ],
-        [
-          1,
-          0,
-          1
-        ]
-      ]
-    },
     "size_5": {
       "cross": [
         [
@@ -1867,46 +1831,6 @@
     }
   },
   "patterns": {
-    "size_3_1": {
-      "input": [
-        [
-          0,
-          1,
-          0
-        ],
-        [
-          1,
-          1,
-          1
-        ],
-        [
-          0,
-          1,
-          0
-        ]
-      ],
-      "expected": "+"
-    },
-    "size_3_2": {
-      "input": [
-        [
-          1,
-          0,
-          1
-        ],
-        [
-          0,
-          1,
-          0
-        ],
-        [
-          1,
-          0,
-          1
-        ]
-      ],
-      "expected": "x"
-    },
     "size_5_1": {
       "input": [
         [

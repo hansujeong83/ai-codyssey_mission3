@@ -94,10 +94,22 @@ def make_demo_dataset() -> dict[str, Any]:
             "cross": make_shape(size, "Cross"),
             "x": make_shape(size, "X"),
         }
-        patterns[f"size_{size}_1"] = {"input": make_shape(size, "Cross"), "expected": "+"}
-        patterns[f"size_{size}_2"] = {"input": make_shape(size, "X"), "expected": "x"}
+        cross = make_shape(size, "Cross")
+        xshape = make_shape(size, "X")
+        noisy_cross = [row[:] for row in cross]
+        noisy_x = [row[:] for row in xshape]
+        for row in range(size):
+            for col in range(size):
+                if cross[row][col] == 0 and xshape[row][col] == 1:
+                    noisy_cross[row][col] = 0.05
+                if xshape[row][col] == 0 and cross[row][col] == 1:
+                    noisy_x[row][col] = 0.05
+        patterns[f"size_{size}_1"] = {"input": cross, "expected": "+"}
+        patterns[f"size_{size}_2"] = {"input": xshape, "expected": "x"}
+        patterns[f"size_{size}_3"] = {"input": noisy_cross, "expected": "Cross"}
+        patterns[f"size_{size}_4"] = {"input": noisy_x, "expected": "X"}
     return {
-        "_notice": "DEMO ONLY. Replace with the original course data.json before official grading.",
+        "_notice": "SELF-CREATED TEST DATA based on the assignment specification; not represented as an instructor-provided original dataset.",
         "filters": filters,
         "patterns": patterns,
     }

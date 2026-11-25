@@ -113,7 +113,7 @@ class DatasetTests(unittest.TestCase):
 
 class BenchmarkTests(unittest.TestCase):
     def test_benchmark_reports_all_required_sizes(self):
-        result = benchmark(repeats=2, samples=2, verbose=False)
+        result = benchmark(repeats=10, samples=2, verbose=False)
         self.assertEqual([row["size"] for row in result], [3, 5, 13, 25])
         self.assertTrue(all(row["mean_ms"] >= 0 for row in result))
         self.assertTrue(all(row["operations"] == row["size"] ** 2 for row in result))

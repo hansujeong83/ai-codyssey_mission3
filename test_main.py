@@ -111,6 +111,46 @@ class DatasetTests(unittest.TestCase):
             load_dataset(self.path)
 
 
+    def test_extract_size_requires_nonempty_index(self):
+        with self.assertRaises(ValueError):
+            extract_size("size_5_")
+
+    def test_missing_filter_is_reported_as_case_fail(self):
+        data = make_demo_dataset()
+        del data["filters"]["size_5"]
+        self.path.write_text(json.dumps(data), encoding="utf-8")
+        report = analyze_dataset(self.path, verbose=False)
+        self.assertEqual(report["failed"], 4)
+        self.assertTrue(all(item["status"] == "FAIL" for item in report["results"][:4]))
+
+    def test_duplicate_normalized_filter_alias_is_rejected(self):
+        filters = {
+            "size_3": {
+                "cross": make_shape(3, "Cross"),
+                "Cross": make_shape(3, "Cross"),
+                "x": make_shape(3, "X"),
+            }
+        }
+        with self.assertRaisesRegex(ValueError, "중복"):
+            get_filter_pair(filters, 3)
+
+    def test_invalid_expected_label_is_case_fail(self):
+        data = make_demo_dataset()
+        data["patterns"]["size_5_1"]["expected"] = "circle"
+        self.path.write_text(json.dumps(data), encoding="utf-8")
+        report = analyze_dataset(self.path, verbose=False)
+        self.assertEqual(report["results"][0]["status"], "FAIL")
+        self.assertIn("지원하지 않는 라벨", report["results"][0]["reason"])
+
+    def test_pattern_size_mismatch_is_case_fail(self):
+        data = make_demo_dataset()
+        data["patterns"]["size_5_1"]["input"] = [[1, 0], [0, 1]]
+        self.path.write_text(json.dumps(data), encoding="utf-8")
+        report = analyze_dataset(self.path, verbose=False)
+        self.assertEqual(report["results"][0]["status"], "FAIL")
+        self.assertIn("예상 크기 5", report["results"][0]["reason"])
+
+
 class BenchmarkTests(unittest.TestCase):
     def test_benchmark_reports_all_required_sizes(self):
         result = benchmark(repeats=10, samples=2, verbose=False)

@@ -132,7 +132,7 @@ def load_dataset(path: str | Path = DATA_PATH) -> dict[str, Any]:
 
 
 def extract_size(case_key: str) -> int:
-    match = re.match(r"^size_(\d+)_", str(case_key))
+    match = re.fullmatch(r"size_(\d+)_(.+)", str(case_key))
     if not match:
         raise ValueError(f"케이스 키 형식 오류: {case_key!r} (예: size_5_1)")
     size = int(match.group(1))
@@ -260,19 +260,24 @@ def read_matrix(title: str, size: int):
 def interactive_mode():
     size = 3
     print("\n=== [사용자 입력 모드: 3×3] ===")
-    filter_a = read_matrix("필터 A", size)
-    filter_b = read_matrix("필터 B", size)
-    print("\n[필터 저장 확인]")
-    print("필터 A:", filter_a)
-    print("필터 B:", filter_b)
+
+    # 필터 확인에서 n을 선택해도 재귀 호출을 쌓지 않도록 반복문으로 처리합니다.
     while True:
-        confirm = input("입력한 필터를 사용하시겠습니까? (y/n): ").strip().lower()
+        filter_a = read_matrix("필터 A", size)
+        filter_b = read_matrix("필터 B", size)
+        print("\n[필터 저장 확인]")
+        print("필터 A:", filter_a)
+        print("필터 B:", filter_b)
+        while True:
+            confirm = input("입력한 필터를 사용하시겠습니까? (y/n): ").strip().lower()
+            if confirm in {"y", "yes"}:
+                break
+            if confirm in {"n", "no"}:
+                print("필터를 다시 입력합니다.")
+                break
+            print("y 또는 n으로 입력해 주세요.")
         if confirm in {"y", "yes"}:
             break
-        if confirm in {"n", "no"}:
-            print("필터를 다시 입력합니다.")
-            return interactive_mode()
-        print("y 또는 n으로 입력해 주세요.")
 
     pattern = read_matrix("패턴", size)
     score_a = score_b = 0.0

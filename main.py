@@ -13,8 +13,8 @@ from typing import Any
 EPSILON = 1e-9
 SUPPORTED_SIZES = (3, 5, 13, 25)
 DATA_PATH = Path(__file__).with_name("data.json")
-BENCHMARK_REPEATS = 100
-BENCHMARK_SAMPLES = 5
+BENCHMARK_REPEATS = 10  # 과제 기준: 크기별 MAC 10회 반복 후 평균
+BENCHMARK_SAMPLES = 1
 INTERACTIVE_REPEATS = 10
 
 
@@ -231,12 +231,12 @@ def benchmark(repeats: int = BENCHMARK_REPEATS,
             "samples": samples, "repeats_per_sample": repeats,
         })
     if verbose:
-        print("\n=== 성능 분석 (크기별 평균 MAC 시간) ===")
+        print(f"\n=== 성능 분석 (크기별 평균 MAC 시간, 평균/{repeats}회) ===")
         print(f"{'크기(N×N)':>12} {'평균 시간(ms)':>16} {'연산 횟수(N²)':>16}")
         print("-" * 48)
         for row in rows:
             print(f"{row['size']}×{row['size']:<9} {row['mean_ms']:>16.6f} {row['operations']:>16}")
-        print(f"측정 기준: 샘플 {samples}회, 샘플당 MAC {repeats}회 반복")
+        print(f"측정 기준: 크기별 MAC {repeats}회 반복 평균 (샘플 {samples}회)")
     return rows
 
 

@@ -132,7 +132,7 @@ def load_dataset(path: str | Path = DATA_PATH) -> dict[str, Any]:
 
 
 def extract_size(case_key: str) -> int:
-    match = re.match(r"^size_(\d+)_", str(case_key))
+    match = re.fullmatch(r"size_(\d+)_(.+)", str(case_key))
     if not match:
         raise ValueError(f"케이스 키 형식 오류: {case_key!r} (예: size_5_1)")
     size = int(match.group(1))
